@@ -1,8 +1,8 @@
 {
     "schema":  "fleet-resume/1",
     "host":  "EC2AMAZ-TMCR7KB",
-    "generated":  "2026-11-24T14:44:03.4415454+00:00",
-    "trigger":  "boot",
+    "generated":  "2026-11-24T14:45:50.7359285+00:00",
+    "trigger":  "watchdog",
     "boot_time":  "2026-11-24T05:22:49.5000000+00:00",
     "components":  [
                        {
@@ -47,12 +47,20 @@
                       "state":  "Ready"
                   },
                   {
+                      "name":  "Fleet-Boot",
+                      "state":  "Ready"
+                  },
+                  {
+                      "name":  "Fleet-Watchdog",
+                      "state":  "Running"
+                  },
+                  {
                       "name":  "Omnisphere-FleetStream",
                       "state":  "Ready"
                   },
                   {
                       "name":  "OmnispherePagesDataRefresh",
-                      "state":  "Running"
+                      "state":  "Ready"
                   },
                   {
                       "name":  "SystemWatchdog",
