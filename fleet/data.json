@@ -1,0 +1,177 @@
+{
+    "generated":  "2026-11-23T06:50:21Z",
+    "generated_epoch":  1795416622,
+    "as_of":  "2026-11-20",
+    "vm":  "VM1317 (Wagon) - 1 VM today; rolls into a combined total as more come online",
+    "fleet_24_7":  true,
+    "uptime_h":  5.3,
+    "dials":  {
+                  "analyzing_done_pct":  88,
+                  "analyzing_left_pct":  12,
+                  "building_pct":  0
+              },
+    "headline":  "About 88% through analyzing. 181 of 189 ideas are EV-scored (96%). Building is 0% because it is a human-gated phase you launch, not a daily rate.",
+    "tracks":  [
+                   {
+                       "name":  "Idea scorecard (189 ideas, v4.10)",
+                       "group":  "Analyzing",
+                       "done":  96,
+                       "left":  4,
+                       "note":  "8 rows need EV, then de-bias ~30 rows -\u003e v4.11"
+                   },
+                   {
+                       "name":  "Scorecard deep primary-reads",
+                       "group":  "Analyzing",
+                       "done":  82,
+                       "left":  18,
+                       "note":  "regulatory deep-reads + consolidation (~6.4 engine-h)"
+                   },
+                   {
+                       "name":  "Habitat matrix base (66x84 = 5,338 cells)",
+                       "group":  "Analyzing",
+                       "done":  100,
+                       "left":  0,
+                       "note":  "base grid complete"
+                   },
+                   {
+                       "name":  "Habitat personalization (move-now)",
+                       "group":  "Analyzing",
+                       "done":  29,
+                       "left":  71,
+                       "note":  "6 of 21 AIs seeded, 15 to go (~2-3 h)"
+                   },
+                   {
+                       "name":  "Notion ideas -\u003e scorecard",
+                       "group":  "Analyzing",
+                       "done":  85,
+                       "left":  15,
+                       "note":  "9 folded; a few not-yet-in-66 pending"
+                   },
+                   {
+                       "name":  "Building / acting (make one)",
+                       "group":  "Building",
+                       "done":  0,
+                       "left":  100,
+                       "note":  "human-gated: pick the venture, then weeks of exec"
+                   }
+               ],
+    "engines":  [
+                    {
+                        "name":  "Claude (scorecard anchor)",
+                        "group":  "Analyzing",
+                        "model":  "Opus 5.5 Max",
+                        "status":  "active",
+                        "note":  "scorecard EV + deep-reads + v4.11"
+                    },
+                    {
+                        "name":  "GPT Remote (ChatGPT/Codex)",
+                        "group":  "Ops-reporting",
+                        "model":  "GPT-6.2 Astra (Ultra)",
+                        "status":  "active",
+                        "note":  "daily ledger + report crons"
+                    },
+                    {
+                        "name":  "Gemini / Antigravity",
+                        "group":  "Analyzing",
+                        "model":  "Gemini Deep Research",
+                        "status":  "active",
+                        "note":  "habitat personalization seeding"
+                    },
+                    {
+                        "name":  "GLM / ZCode",
+                        "group":  "Building",
+                        "model":  "GLM-5.3 Max",
+                        "status":  "active",
+                        "note":  "build scaffolds / code"
+                    },
+                    {
+                        "name":  "Qwen",
+                        "group":  "Analyzing",
+                        "model":  "Qwen4-Max",
+                        "status":  "active",
+                        "note":  "breadth research (144-src runs)"
+                    },
+                    {
+                        "name":  "Doubao",
+                        "group":  "Analyzing",
+                        "model":  "Doubao Expert",
+                        "status":  "active",
+                        "note":  "panel debate core"
+                    },
+                    {
+                        "name":  "Mistral / Vibe",
+                        "group":  "Breadth",
+                        "model":  "Mistral Large",
+                        "status":  "idle",
+                        "note":  "signed in; weighted-lower breadth"
+                    },
+                    {
+                        "name":  "Kimi (desktop app)",
+                        "group":  "Analyzing",
+                        "model":  "K3.1 Pro Max",
+                        "status":  "blocked",
+                        "note":  "login wall -\u003e International login -\u003e Google"
+                    },
+                    {
+                        "name":  "Grok",
+                        "group":  "Breadth",
+                        "model":  "Grok (newest)",
+                        "status":  "idle",
+                        "note":  "signed in; give live work"
+                    },
+                    {
+                        "name":  "DeepSeek",
+                        "group":  "Breadth",
+                        "model":  "DeepSeek V4",
+                        "status":  "idle",
+                        "note":  "high-IQ debate core on call"
+                    },
+                    {
+                        "name":  "Perplexity / Comet",
+                        "group":  "Breadth",
+                        "model":  "Pro",
+                        "status":  "idle",
+                        "note":  "sourced search"
+                    },
+                    {
+                        "name":  "StepFun",
+                        "group":  "Breadth",
+                        "model":  "Step (newest)",
+                        "status":  "idle",
+                        "note":  "desktop seat"
+                    },
+                    {
+                        "name":  "Meta AI / Muse",
+                        "group":  "Breadth",
+                        "model":  "Llama 4 (newest)",
+                        "status":  "idle",
+                        "note":  "breadth"
+                    },
+                    {
+                        "name":  "AutoClaw / MoltBot",
+                        "group":  "Building",
+                        "model":  "orchestrator",
+                        "status":  "active",
+                        "note":  "automation gateway :8766"
+                    },
+                    {
+                        "name":  "Regional/sovereign tier",
+                        "group":  "Scaffold",
+                        "model":  "EXAONE-K, HyperCLOVA X, Yandex, Egune...",
+                        "status":  "scaffold",
+                        "note":  "keyed-on-demand via router"
+                    }
+                ],
+    "live":  {
+                 "active_engines":  7,
+                 "roster_total":  21,
+                 "utilization_pct":  33,
+                 "node_procs":  145,
+                 "python_procs":  59,
+                 "sessions":  80,
+                 "deliverables_24h":  19,
+                 "deliverables_7d":  43,
+                 "burn_per_hour":  2208,
+                 "stream_state":  "alert"
+             }
+}

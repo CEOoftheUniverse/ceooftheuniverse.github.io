@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Omnisphere Fleet — live status</title>
+<style>
+:root{--ink:#241f33;--mut:#8a7fa6;--line:#e7dcf0;--an:#8a7cff;--ok:#1aa779;--warn:#e07b1a;--blk:#c23b5c;--card:#fff;--track:#efe9f7;--bg1:#fbf8ff;--bg2:#f3f0ff}
+*{box-sizing:border-box}
+body{margin:0;font:13.5px/1.45 -apple-system,Segoe UI,Roboto,system-ui,sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2));padding:0 0 40px}
+.nav{background:#1b1430;padding:9px 16px;font-size:13px}
+.nav a{color:#c9b8ff;text-decoration:none;margin-right:14px;font-weight:700}
+.nav a.home{color:#8fe3b2}
+.wrap{max-width:860px;margin:0 auto;padding:14px}
+h1{font-size:18px;margin:4px 0 2px;text-align:center}
+.sub{text-align:center;color:var(--mut);font-size:11.5px;margin-bottom:12px}
+.sub b{color:#6b5ea8}
+.dials{display:flex;gap:9px;margin-bottom:11px}
+.dial{flex:1;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:11px 6px;text-align:center;box-shadow:0 2px 12px rgba(138,124,255,.07)}
+.big{font-size:26px;font-weight:800;line-height:1}
+.dlab{font-size:9.5px;color:var(--mut);margin-top:4px;text-transform:uppercase;letter-spacing:.3px}
+.an{color:var(--an)}.ok{color:var(--ok)}.warn{color:var(--warn)}.blk{color:var(--blk)}
+.ans{background:linear-gradient(165deg,#fff,#eef7f1);border:1.5px solid #bfe3cf;border-radius:13px;padding:10px 13px;text-align:center;font-size:12.5px;margin-bottom:12px}
+h2{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#9a8fb5;margin:16px 2px 6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:8px 10px;box-shadow:0 2px 12px rgba(138,124,255,.07)}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px;text-align:center}
+.tile .v{font-size:20px;font-weight:800}
+.tile .l{font-size:9.5px;color:var(--mut);text-transform:uppercase;letter-spacing:.3px;margin-top:3px}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{background:#efe6fb;color:#4a3d6b;font-size:9px;text-transform:uppercase;letter-spacing:.3px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.bar{height:8px;border-radius:5px;background:var(--track);overflow:hidden;min-width:60px}
+.fill{height:100%;border-radius:5px}
+.pill{display:inline-block;padding:1px 7px;border-radius:999px;font-size:9.5px;font-weight:800}
+.p-active{background:#e6f6ef;color:#1a8f68}.p-idle{background:#eee9f8;color:#6b5ea8}.p-blocked{background:#fde7ec;color:#c23b5c}.p-scaffold{background:#fdf0d6;color:#9a7420}
+.grp{font-size:9px;color:#9a8fb5;text-transform:uppercase}
+.foot{color:var(--mut);font-size:10.5px;margin-top:12px;line-height:1.5}
+.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);margin-right:5px;animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+#err{display:none;background:#fde7ec;color:#c23b5c;border:1px solid #f3c3cf;border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="nav">
+  <a class="home" href="/">&#9776; Omnisphere ventures hub</a>
+  <a href="/energy/">Energy</a><a href="/financing/">Financing</a><a href="/fleet/">Fleet</a>
+</div>
+<div class="wrap">
+  <h1>&#128202; Omnisphere Fleet &mdash; live status</h1>
+  <div class="sub" id="sub">loading&hellip;</div>
+  <div id="err"></div>
+
+  <div class="dials" id="dials"></div>
+  <div class="ans" id="headline"></div>
+
+  <h2>Live signals <span style="text-transform:none;color:#b7abd6">(re-read from the VM each refresh)</span></h2>
+  <div class="tiles" id="tiles"></div>
+
+  <h2>Where the analysis stands &mdash; by track</h2>
+  <div class="card"><table id="tracks"><thead><tr><th>Track</th><th class="n">Done</th><th>Progress</th><th class="n">Left</th><th>Time / passes left</th></tr></thead><tbody></tbody></table></div>
+
+  <h2>Full roster &mdash; every seat, newest model</h2>
+  <div class="card"><table id="engines"><thead><tr><th>Engine / seat</th><th>Model</th><th>Group</th><th>Status</th><th>Doing</th></tr></thead><tbody></tbody></table></div>
+
+  <div class="foot" id="foot"></div>
+</div>
+<script>
+(function(){
+  function el(id){return document.getElementById(id);}
+  function esc(s){var d=document.createElement('div');d.textContent=(s==null?'':String(s));return d.innerHTML;}
+  function barColor(p){return p>=80?'var(--ok)':p>=40?'var(--an)':p>0?'var(--warn)':'var(--blk)';}
+  function fmt(n){return (n==null||n==='')?'&mdash;':n;}
+
+  function render(d){
+    el('err').style.display='none';
+    var gen=d.generated?new Date(d.generated):null;
+    var genStr=gen?gen.toLocaleString():'(unknown)';
+    el('sub').innerHTML='<span class="live-dot"></span><b>'+esc(d.vm||'VM')+'</b> &middot; data generated '+esc(genStr)+' &middot; page auto-refreshes every 60s';
+    var di=d.dials||{};
+    el('dials').innerHTML=
+      '<div class="dial"><div class="big ok">'+fmt(d.uptime_h)+'h</div><div class="dlab">running (this boot)</div></div>'+
+      '<div class="dial"><div class="big an">'+fmt(di.analyzing_done_pct)+'%</div><div class="dlab">analyzing done</div></div>'+
+      '<div class="dial"><div class="big warn">'+fmt(di.analyzing_left_pct)+'%</div><div class="dlab">analyzing left</div></div>'+
+      '<div class="dial"><div class="big blk">'+fmt(di.building_pct)+'%</div><div class="dlab">building started</div></div>';
+    el('headline').innerHTML='<b>'+esc(d.headline||'')+'</b>';
+    var L=d.live||{};
+    el('tiles').innerHTML=
+      '<div class="tile"><div class="v ok">'+fmt(L.active_engines)+'/'+fmt(L.roster_total)+'</div><div class="l">engines active</div></div>'+
+      '<div class="tile"><div class="v an">'+fmt(L.utilization_pct)+'%</div><div class="l">utilization</div></div>'+
+      '<div class="tile"><div class="v">'+fmt(L.deliverables_24h)+'</div><div class="l">files made 24h</div></div>'+
+      '<div class="tile"><div class="v">'+fmt(L.sessions)+'</div><div class="l">sessions on VM</div></div>'+
+      '<div class="tile"><div class="v">'+fmt(L.node_procs)+'+'+fmt(L.python_procs)+'</div><div class="l">node + python procs</div></div>'+
+      '<div class="tile"><div class="v">'+fmt(L.deliverables_7d)+'</div><div class="l">files made 7d</div></div>';
+    var tb=el('tracks').tBodies[0];tb.innerHTML='';
+    (d.tracks||[]).forEach(function(t){
+      var tr=document.createElement('tr');
+      tr.innerHTML='<td>'+esc(t.name)+' <span class="grp">'+esc(t.group)+'</span></td>'+
+        '<td class="n">'+fmt(t.done)+'%</td>'+
+        '<td><div class="bar"><div class="fill" style="width:'+(t.done||0)+'%;background:'+barColor(t.done||0)+'"></div></div></td>'+
+        '<td class="n">'+fmt(t.left)+'%</td>'+
+        '<td>'+esc(t.note)+'</td>';
+      tb.appendChild(tr);
+    });
+    var eb=el('engines').tBodies[0];eb.innerHTML='';
+    (d.engines||[]).forEach(function(e){
+      var st=(e.status||'').toLowerCase();
+      var cls=st==='active'?'p-active':st==='blocked'?'p-blocked':st==='scaffold'?'p-scaffold':'p-idle';
+      var tr=document.createElement('tr');
+      tr.innerHTML='<td><b>'+esc(e.name)+'</b></td>'+
+        '<td>'+esc(e.model)+'</td>'+
+        '<td class="grp">'+esc(e.group)+'</td>'+
+        '<td><span class="pill '+cls+'">'+esc(e.status)+'</span></td>'+
+        '<td>'+esc(e.note)+'</td>';
+      eb.appendChild(tr);
+    });
+    el('foot').innerHTML='Live signals (uptime, active engines, sessions, files, procs) are re-read from the VM every ~10&nbsp;min by a reboot-surviving scheduled task and committed here; the page re-fetches them on load and every 60s. Analysis-track &amp; roster figures are as of <b>'+esc(d.as_of||'')+'</b> and advance as the fleet works. This VM (Vagon) powers off 1&ndash;2&times;/day and comes back by itself &mdash; this page stays up regardless because it is served from GitHub Pages, not the VM. Models shown are each seat&rsquo;s newest (Opus&nbsp;5.5&nbsp;Max, GPT&#8209;6.2&nbsp;Astra, Gemini&nbsp;4, GLM&nbsp;5.3, Qwen4&nbsp;Max, Kimi&nbsp;K3.1, DeepSeek&nbsp;V4). Status/feasibility dashboard &mdash; not investment advice.';
+  }
+
+  function load(){
+    fetch('./data.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(render).catch(function(e){
+      var box=el('err');box.style.display='block';box.textContent='Could not load live data.json ('+e+') — retrying on next refresh.';
+    });
+  }
+  load();
+  setInterval(load,60000);
+})();
+</script>
+</body>
+</html>
