@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Habitat-Metrics Master Chart v3 — Relocation Decision Tool (Anchor: Jeju) · +Radiation cleanliness</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#2b3444;
+    --ink:#e6edf3; --mut:#93a1b3; --accent:#4cc2ff; --accent2:#7ee787;
+    --warn:#ffcc66; --bad:#ff7b72; --good:#7ee787; --anchor:#d2a8ff; --kawaii:#ff9ecb; --innov:#7cc4ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  header{padding:20px 22px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#141d2e,#0d1117)}
+  h1{margin:0 0 4px;font-size:20px}
+  h2{font-size:15px;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);margin:26px 0 10px}
+  .sub{color:var(--mut);font-size:13px}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 18px 60px}
+  .grid{display:grid;gap:18px}
+  @media(min-width:920px){.two{grid-template-columns:350px 1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .presets{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+  .preset{cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--ink);padding:8px 12px;border-radius:20px;font-size:13px}
+  .preset.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset;color:#fff}
+  .sldrow{display:grid;grid-template-columns:1fr 40px;gap:6px;align-items:center;margin:7px 0}
+  .sldrow label{font-size:12.5px;display:flex;align-items:center;gap:6px}
+  .pm{font-size:9px;padding:1px 5px;border-radius:8px;border:1px solid var(--line);color:var(--mut)}
+  .pm.yes{color:#0d1117;background:var(--good);border-color:var(--good)}
+  .pm.part{color:#0d1117;background:#ffcc66;border-color:#ffcc66}
+  .pm.no{color:var(--mut)}
+  input[type=range]{width:100%}
+  .wval{text-align:right;font-variant-numeric:tabular-nums;color:var(--accent)}
+  table{border-collapse:collapse;width:100%;font-size:12.5px}
+  th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;white-space:nowrap}
+  th{background:var(--panel2);position:sticky;top:0;color:var(--mut);font-weight:600;cursor:pointer;user-select:none}
+  th:hover{color:#fff}
+  td.name,th.name{text-align:left;position:sticky;left:0;background:var(--panel);z-index:2;cursor:pointer}
+  th.name{z-index:3;background:var(--panel2)}
+  .tblscroll{overflow:auto;border:1px solid var(--line);border-radius:12px;max-height:72vh}
+  .anchor td.name{color:var(--anchor);font-weight:700}
+  tbody tr:hover td{background:rgba(76,194,255,.08)}
+  .bar{height:15px;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--accent2));display:inline-block;vertical-align:middle}
+  .scorecell{font-weight:700;font-variant-numeric:tabular-nums}
+  .heat{font-variant-numeric:tabular-nums}
+  .foot{color:var(--mut);font-size:12px;margin-top:10px;line-height:1.6}
+  a{color:var(--accent)}
+  .pill{display:inline-block;font-size:11px;color:var(--mut);border:1px solid var(--line);border-radius:20px;padding:2px 9px;margin-left:6px}
+  .note{background:var(--panel2);border:1px dashed var(--line);border-radius:10px;padding:10px 12px;color:var(--mut);font-size:12.5px;margin-top:10px}
+  .num{font-variant-numeric:tabular-nums}
+  /* innovation map */
+  .map{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+  .hub{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .hub h4{margin:0 0 6px;font-size:13px;color:var(--innov)}
+  .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+  .tag{font-size:10.5px;border:1px solid var(--line);border-radius:20px;padding:2px 7px;color:var(--mut)}
+  .tag.ph{border-color:#7cc4ff;color:#9ed3ff}
+  .tag.q{border-color:#b48cff;color:#c8adff}
+  .tag.ai{border-color:#7ee787;color:#9df0a8}
+  .tag.semi{border-color:#ffcc66;color:#ffd98a}
+  .tag.bio{border-color:#ff9ecb;color:#ffb8db}
+  .hub .cand{font-size:11px;color:var(--anchor);margin-top:6px}
+  /* detail drawer */
+  #overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;z-index:40}
+  #drawer{position:fixed;top:0;right:0;height:100%;width:min(560px,94vw);background:var(--panel);border-left:1px solid var(--line);z-index:41;transform:translateX(100%);transition:transform .2s;overflow:auto;display:none}
+  #drawer.open{transform:translateX(0)}
+  .dhead{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--panel)}
+  .dbody{padding:16px 18px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+  .chip{font-size:11px;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:3px 9px;color:var(--ink)}
+  .lbtns{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .lbtn{font-size:12px;text-decoration:none;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;color:var(--accent)}
+  .vid{width:100%;aspect-ratio:16/9;border:1px solid var(--line);border-radius:10px;margin-top:8px}
+  .close{cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:8px;padding:6px 10px}
+  .kw{color:var(--kawaii)}
+</style>
+</head>
+<body>
+<div style="background:#0c1118;border-bottom:1px solid #2a3542;padding:9px 16px;font-size:13px;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <a href="/" style="color:#8fe3b2;font-weight:700;text-decoration:none">&#9776; Omnisphere ventures hub</a>
+  <span style="color:#5b6b7d"> &middot; </span>
+  <a href="/energy/" style="color:#6fd0ff;text-decoration:none;margin-right:11px">Energy</a>
+  <a href="/financing/" style="color:#6fd0ff;text-decoration:none;margin-right:11px">Financing</a>
+  <a href="/atlas/" style="color:#6fd0ff;text-decoration:none;margin-right:11px">Atlas</a>
+  <a href="/market/" style="color:#6fd0ff;text-decoration:none;margin-right:11px">Market</a>
+  <a href="/radiation/" style="color:#6fd0ff;text-decoration:none;margin-right:11px">Radiation</a>
+  <a href="/fleet/" style="color:#6fd0ff;text-decoration:none">Fleet</a>
+</div>
+<header>
+  <div class="wrap">
+    <h1>Habitat-Metrics Master Chart <span class="pill">v3 · +Innovation +Kawaii +Radiation</span></h1>
+    <div class="sub">Anchor: <b style="color:var(--anchor)">Jeju</b> · 14 places × <b>13</b> criteria · % (higher=better) · metric units · click a <b>column header to sort</b>, click a <b>row for detail</b> (pics / video / links) · built on Nomad List public data.</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="grid two" style="margin-top:18px">
+    <div class="card">
+      <h2 style="margin-top:2px">Goal presets</h2>
+      <div class="presets" id="presets"></div>
+      <div class="note">Tunable axes now include <b class="kw">Kawaii culture-fit</b>, <b style="color:var(--innov)">Innovation output</b> (3–5 yr rolling), and <b style="color:var(--good)">Radiation cleanliness</b> — positive-framed: higher % = less damaging UV + less ambient radon/cosmic/terrestrial radiation. Drag any slider — ranking updates live.</div>
+      <h2>Adjustable weights <span class="sub" id="wsum"></span></h2>
+      <div id="sliders"></div>
+      <div class="foot"><span class="pm yes">PM</span> market-informed · <span class="pm part">PM~</span> partial · <span class="pm no">—</span> not on markets</div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:2px">Live ranking <span class="sub" id="presetName"></span></h2>
+      <div class="tblscroll"><table id="rankTable"></table></div>
+      <div class="foot" id="rankFoot"></div>
+    </div>
+  </div>
+
+  <h2>Full %-matrix — 14 places × 13 criteria (click header = sort · click row = detail)</h2>
+  <div class="tblscroll"><table id="matrix"></table></div>
+
+  <h2>Raw data (metric units)</h2>
+  <div class="tblscroll"><table id="raw"></table></div>
+
+  <h2 style="color:var(--innov)">🌐 Map of innovations — who actually makes the frontier tech</h2>
+  <div class="note" style="margin-bottom:12px">Honest on the photonics example: Australia has <b>real</b> photonic milestones — the 2020 <b>44.2 Tbps single-chip</b> record (Monash · Swinburne · RMIT, in <b>Melbourne</b>, not Hobart) and <b>PsiQuantum</b>'s Australian founders. But optical / photonic computing is a <b>global race</b> — no one country "invented" it. The Netherlands (PhotonDelta, Eindhoven), Canada (Xanadu, Toronto), the US and China are all frontier. Nodes below tag frontier fields and flag which of our candidate places sit in/near each hub.</div>
+  <div class="map" id="map"></div>
+  <div class="foot">Legend: <span class="tag ph">photonics</span> <span class="tag q">quantum</span> <span class="tag ai">AI</span> <span class="tag semi">semiconductors</span> <span class="tag bio">biotech/genomics</span>. Cluster ranks: WIPO Global Innovation Index 2025 (Shenzhen–HK–Guangzhou #1, Tokyo–Yokohama #2, San Jose–SF #3, Beijing #4, Seoul #5). Switzerland = #1 country 15 yrs; South Korea #4 country, highest R&D intensity (~4.93% GDP).</div>
+
+  <div class="card" style="margin-top:20px">
+    <h2 style="margin-top:2px">How to read this</h2>
+    <div class="foot">
+      Scores are % (higher=better for a move). "Housing cost" = affordability; "Time/$ to relocate" = efficiency from Jeju (Jeju=100 on both — you're already here). <b class="kw">Kawaii culture-fit</b> personalises the chart to your taste: Tokyo=100 (Akihabara/Harajuku + birthplace of city-pop/Shibuya-kei); Korea/Jeju partial (cute-cafe + idol culture); Mexico City & Chiang Mai have surprisingly large anime fandoms; Blue-Zone/Alps places score low. <b style="color:var(--innov)">Innovation</b> uses a 3–5 yr rolling window so one announcement can't skew it, and scores the <i>local</i> ecosystem in national context — e.g. Switzerland is #1 globally but a Valais alpine town isn't Zurich; Sardinia's Ogliastra is rural (its one claim is longevity <b>genomics</b>); Hobart rides Australia's research but the photonics is in Melbourne. <b>Neither new axis is prediction-market-traded</b> — both are lagging/qualitative, flagged "—". <b style="color:var(--good)">Radiation cleanliness</b> (positive-framed, higher=cleaner) blends the UV burden (latitude · altitude · ozone · surface reflection) with ambient ionizing dose (radon from local geology, cosmic from altitude, terrestrial gamma). It isolates the UV + ionizing sub-signal so you can weight it on its own; it partly overlaps the broad Health column (which also folds in healthcare, air and water), so weighting both double-counts a little — by design, kept separate so the lever is yours. Surprises worth seeing: the Swiss Alps and Sardinia dip (altitude/snow UV + granite/alpine radon), while cloudy high-latitude Reykjavík tops it.
+    </div>
+  </div>
+</div>
+
+<div id="overlay" onclick="closeDrawer()"></div>
+<div id="drawer">
+  <div class="dhead"><b id="dTitle"></b><span class="close" onclick="closeDrawer()">✕ close</span></div>
+  <div class="dbody" id="dBody"></div>
+</div>
+
+<script>
+const CRIT=[
+ {k:"climate",label:"Climate",pm:"yes"},
+ {k:"havail",label:"Housing avail.",pm:"no"},
+ {k:"hcost",label:"Housing afford.",pm:"part"},
+ {k:"comm",label:"Community",pm:"no"},
+ {k:"pleas",label:"Pleasantness",pm:"no"},
+ {k:"health",label:"Health & longevity",pm:"part"},
+ {k:"safety",label:"Safety",pm:"part"},
+ {k:"net",label:"Internet",pm:"no"},
+ {k:"time",label:"Time-to-move",pm:"part"},
+ {k:"money",label:"$-to-move",pm:"part"},
+ {k:"innov",label:"Innovation output",pm:"no"},
+ {k:"kawaii",label:"Kawaii culture-fit",pm:"no"},
+ {k:"radclean",label:"Radiation cleanliness",pm:"no"}
+];
+
+const PRESETS={
+ "Balanced":       {climate:9,havail:7,hcost:10,comm:10,pleas:9,health:14,safety:9,net:7,time:6,money:6,innov:7,kawaii:6,radclean:6},
+ "Longevity-first":{climate:10,havail:4,hcost:8,comm:6,pleas:12,health:28,safety:12,net:4,time:4,money:4,innov:4,kawaii:4,radclean:10},
+ "Community-first":{climate:9,havail:5,hcost:7,comm:24,pleas:12,health:7,safety:7,net:6,time:5,money:5,innov:5,kawaii:8,radclean:3},
+ "Innovation-first":{climate:7,havail:4,hcost:6,comm:8,pleas:8,health:8,safety:6,net:10,time:4,money:4,innov:26,kawaii:9,radclean:3},
+ "Kawaii / creative":{climate:8,havail:2,hcost:4,comm:16,pleas:12,health:6,safety:6,net:6,time:3,money:3,innov:8,kawaii:26,radclean:2},
+ "Nature / cycling":{climate:14,havail:4,hcost:6,comm:6,pleas:24,health:18,safety:10,net:4,time:5,money:4,innov:3,kawaii:2,radclean:7},
+ "Cost / budget":  {climate:6,havail:7,hcost:20,comm:6,pleas:3,health:6,safety:4,net:9,time:12,money:19,innov:4,kawaii:4,radclean:2},
+ "Speed / low-effort":{climate:4,havail:11,hcost:9,comm:7,pleas:3,health:4,safety:2,net:8,time:24,money:20,innov:4,kawaii:4,radclean:1}
+};
+
+// scores: climate,havail,hcost,comm,pleas,health,safety,net,time,money,innov,kawaii
+const CITY=[
+ {name:"Tokyo, JP",slug:"tokyo",wiki:"Tokyo",ytq:"tokyo city pop kawaii slice of life vibe",
+  s:{climate:70,havail:65,hcost:52,comm:68,pleas:88,health:78,safety:95,net:85,time:82,money:62,innov:92,kawaii:100},
+  raw:{cost:"1,880–2,970",rent:"940–2,500",net:"gigabit fibre",pm25:"~10 (urban)",temp:"16",safety:"91/100",visa:"JP nomad visa 6mo · ~2h from Jeju"},
+  blurb:"World #2 innovation cluster (Tokyo–Yokohama) and the global capital of kawaii — Akihabara, Harajuku, Nakano, birthplace of city-pop & Shibuya-kei. Japan has the world's highest life expectancy; Tokyo is exceptionally safe and ~2h from Jeju.",
+  innov:"Robotics, materials, semiconductors, AI. WIPO GII 2025 cluster #2.",kawaii:"Maximum: otaku districts, maid cafés, idol/city-pop scene, slice-of-life culture at source."},
+ {name:"Jeju, KR",anchor:true,slug:"jeju-island",wiki:"Jeju_Province",ytq:"jeju island cafe aesthetic korea chill",
+  s:{climate:72,havail:62,hcost:68,comm:45,pleas:72,health:70,safety:92,net:85,time:100,money:100,innov:62,kawaii:55},
+  raw:{cost:"1,590",rent:"370–450",net:"≥1 Gbps avail*",pm25:"~12 (spring dust)",temp:"16",safety:"Very high",visa:"— (already here)"},
+  blurb:"Your anchor. Relaxed volcanic island, very safe, cheap-ish, gigabit Korea. Innovation rides Korea's national strength (semiconductors, R&D 4.93% GDP) though Jeju itself is tourism/agriculture. Cute-cafe + K-idol culture gives a moderate kawaii read.",
+  innov:"Korea #4 GII country, top R&D intensity; Jeju local = smart-island/data-centre pilots.",kawaii:"Korea partial: cute-cafe tourism, character/idol culture, some anime fandom."},
+ {name:"Sardinia (Ogliastra), IT",slug:"cagliari",wiki:"Ogliastra",ytq:"sardinia ogliastra blue zone village",
+  s:{climate:85,havail:70,hcost:82,comm:45,pleas:80,health:88,safety:82,net:55,time:50,money:52,innov:40,kawaii:18},
+  raw:{cost:"1,400–1,800",rent:"400–600",net:"30–80 Mbps",pm25:"~8",temp:"18",safety:"High",visa:"IT nomad visa"},
+  blurb:"The original Blue Zone — world's highest concentration of male centenarians (Nuoro/Ogliastra). Cheap, warm, sea + slow life. Rural, so low local innovation (its one frontier claim: the SardiNIA longevity-genomics cohort) and minimal kawaii scene.",
+  innov:"Niche: SardiNIA / longevity genomics research cohort.",kawaii:"Minimal — rural Mediterranean."},
+ {name:"Lisbon, PT",slug:"lisbon",wiki:"Lisbon",ytq:"lisbon portugal city vibe walk",
+  s:{climate:88,havail:50,hcost:40,comm:92,pleas:85,health:68,safety:85,net:88,time:60,money:55,innov:66,kawaii:30},
+  raw:{cost:"2,000–2,500",rent:"1,200–1,800",net:"175–189 Mbps",pm25:"~9",temp:"17",safety:"Very high",visa:"D8 nomad visa"},
+  blurb:"Europe's nomad capital — huge single-friendly community, mild sunny climate, Web-Summit-fuelled startup scene (rising unicorns). Modest but real European anime/con scene.",
+  innov:"Rising cluster; Web Summit host; first Portuguese unicorns.",kawaii:"Modest EU otaku/con scene (Iberanime)."},
+ {name:"Reykjavík, IS",slug:"reykjavik",wiki:"Reykjav%C3%ADk",ytq:"reykjavik iceland aesthetic",
+  s:{climate:45,havail:45,hcost:45,comm:55,pleas:70,health:90,safety:90,net:95,time:40,money:38,innov:64,kawaii:22},
+  raw:{cost:"1,620–2,500",rent:"800–1,200",net:"404 Mbps",pm25:"~5 (AQI 21)*",temp:"5",safety:"Very high",visa:"Limited long-stay"},
+  blurb:"Cleanest air, safest streets, fastest internet — but dark cold winters. High per-capita innovation (deCODE genomics, geothermal/energy tech).",
+  innov:"Genomics (deCODE), renewable/geothermal; R&D ~2.65% GDP.",kawaii:"Small con scene."},
+ {name:"Swiss Alps (Valais), CH",slug:"zermatt",wiki:"Valais",ytq:"swiss alps valais village",
+  s:{climate:60,havail:55,hcost:30,comm:38,pleas:82,health:90,safety:95,net:85,time:25,money:30,innov:72,kawaii:15},
+  raw:{cost:"3,000–3,500",rent:"1,100–1,400",net:"200+ Mbps",pm25:"~7",temp:"9",safety:"Highest",visa:"Very restrictive (non-EU)"},
+  blurb:"Switzerland = #1 innovation country 15 yrs running, life expectancy 84+. Pristine, safe, expensive; alpine town is peripheral to the Zurich/Lausanne engine (EPFL has a Valais/Sion campus).",
+  innov:"National #1 GII; pharma/biotech/precision; EPFL Valais energy research.",kawaii:"Minimal — alpine."},
+ {name:"Hobart, Tasmania AU",slug:"hobart",wiki:"Hobart",ytq:"hobart tasmania nature mona",
+  s:{climate:66,havail:50,hcost:42,comm:42,pleas:76,health:92,safety:82,net:65,time:32,money:32,innov:55,kawaii:20},
+  raw:{cost:"2,300–2,800",rent:"1,300–1,500",net:"50–100 Mbps",pm25:"4.4 (cleanest)",temp:"12",safety:"High",visa:"Hard AU visa"},
+  blurb:"Australia's cleanest air (4.4 µg/m³). Antarctic & marine science niche (IMAS/CSIRO). NOTE: the famous 44.2 Tbps photonic chip was Melbourne, not Hobart — don't credit Tasmania for it.",
+  innov:"Antarctic/marine science; rides AU research but photonics/quantum hubs are Melbourne/Brisbane.",kawaii:"Small AU fandom."},
+ {name:"Nelson, NZ",slug:"nelson",wiki:"Nelson,_New_Zealand",ytq:"nelson new zealand south island",
+  s:{climate:80,havail:55,hcost:40,comm:40,pleas:80,health:82,safety:85,net:72,time:30,money:30,innov:48,kawaii:18},
+  raw:{cost:"2,500–3,000",rent:"1,200–1,400",net:"100–200 Mbps",pm25:"low (winter smoke)*",temp:"13",safety:"High",visa:"Hard NZ visa"},
+  blurb:"Sunniest NZ, beaches, safe, high QoL, cheaper than Queenstown. Peripheral for innovation (Auckland/Wellington lead); tiny kawaii scene.",
+  innov:"Small; some aerospace/tech niche.",kawaii:"Minimal."},
+ {name:"Queenstown, NZ",slug:"queenstown",wiki:"Queenstown,_New_Zealand",ytq:"queenstown new zealand scenery",
+  s:{climate:62,havail:40,hcost:25,comm:55,pleas:78,health:88,safety:85,net:72,time:30,money:25,innov:40,kawaii:18},
+  raw:{cost:"3,000–3,500",rent:"1,800+",net:"100–200 Mbps",pm25:"~0 (very clean)",temp:"11",safety:"High",visa:"Hard NZ visa"},
+  blurb:"Stunning alpine-lake scenery, pristine air, very safe — but expensive and housing-tight; a tourism economy, not an innovation hub.",
+  innov:"Tourism-led; minimal R&D.",kawaii:"Minimal."},
+ {name:"Chiang Mai, TH",slug:"chiang-mai",wiki:"Chiang_Mai",ytq:"chiang mai thailand digital nomad cafe",
+  s:{climate:62,havail:90,hcost:92,comm:82,pleas:74,health:35,safety:78,net:85,time:85,money:88,innov:50,kawaii:42},
+  raw:{cost:"1,200–1,800",rent:"300–500",net:"100–200 Mbps",pm25:"18 avg / ~100 burn season",temp:"27",safety:"High",visa:"DTV visa (easy)"},
+  blurb:"Cheapest + big established nomad community + easy visa + fast fibre. BUT burning-season PM2.5 (~100 µg/m³, ~20× WHO) tanks the health axis. Thailand has a strong anime/cosplay + cute-café culture.",
+  innov:"Modest; CMU + Thailand 4.0 creative-tech.",kawaii:"Notable Thai anime/cosplay + kawaii-café scene."},
+ {name:"Canggu (Bali), ID",slug:"canggu",wiki:"Canggu",ytq:"canggu bali cafe surf lifestyle",
+  s:{climate:68,havail:80,hcost:70,comm:95,pleas:70,health:55,safety:62,net:58,time:72,money:78,innov:45,kawaii:28},
+  raw:{cost:"1,400–2,200",rent:"600–1,200",net:"30–100 Mbps*",pm25:"~15",temp:"28",safety:"Moderate (traffic)",visa:"B211/nomad visa"},
+  blurb:"Densest young nomad community in Asia. Beach-café creative energy, but variable internet, traffic risk, and Indonesia's tech (unicorns) is in Jakarta not Bali.",
+  innov:"Lifestyle hub; startups are in Jakarta.",kawaii:"Young creative crowd, not anime-centric."},
+ {name:"Mexico City, MX",slug:"mexico-city",wiki:"Mexico_City",ytq:"mexico city roma condesa vibe",
+  s:{climate:82,havail:72,hcost:62,comm:85,pleas:80,health:48,safety:55,net:68,time:62,money:45,innov:68,kawaii:45},
+  raw:{cost:"1,500–2,500",rent:"700–1,200",net:"50–100 Mbps",pm25:"~20–25 (valley smog)",temp:"18",safety:"Moderate (zone-dep.)",visa:"Temp-resident (easy-ish)"},
+  blurb:"Spring-like climate, huge international + creative community, LatAm's biggest startup scene (new WIPO top-100 cluster, 79th). One of the largest anime fandoms in the Americas (La Mole con). Valley smog + zone-dependent safety are the trade-offs.",
+  innov:"Entered WIPO top-100 clusters 2025; fintech unicorns.",kawaii:"Big LatAm anime/cosplay fandom."},
+ {name:"Tbilisi, GE",slug:"tbilisi",wiki:"Tbilisi",ytq:"tbilisi georgia old town vibe",
+  s:{climate:64,havail:85,hcost:80,comm:70,pleas:72,health:52,safety:80,net:78,time:88,money:68,innov:45,kawaii:20},
+  raw:{cost:"1,200–1,500",rent:"500–700",net:"100–300 Mbps",pm25:"~20 (traffic)",temp:"13",safety:"High (geopolitical risk)",visa:"Visa-free 1 year"},
+  blurb:"Best-value base: visa-free a year, cheap, fast coworking fibre, growing scene. Emerging IT/crypto/outsourcing, but low national R&D and real regional geopolitical risk (flag it in the Safety + prediction-market layer).",
+  innov:"Emerging IT/crypto/outsourcing; low R&D base.",kawaii:"Small."},
+ {name:"Slovenia (Ljubljana/Bled), SI",slug:"ljubljana",wiki:"Ljubljana",ytq:"slovenia ljubljana lake bled julian alps nature cycling",
+  s:{climate:66,havail:52,hcost:55,comm:50,pleas:86,health:70,safety:92,net:82,time:48,money:50,innov:58,kawaii:20},
+  raw:{cost:"1,200–2,500",rent:"950–1,400 ctr / 400–600 out",net:"121 Mbps avg",pm25:"9–22 (winter inversion spikes)*",temp:"11",safety:"Top-10 safest",visa:"DN visa (Nov 2025; €3,200/mo; 12mo non-renew)"},
+  blurb:"~58% forested — Julian Alps + Lake Bled/Bohinj, one of Europe's greenest and a genuine cycling paradise (alpine + coastal routes). Very safe (top-10 globally), beautiful, compact walkable capital, ~1h to Italy/Austria/Croatian coast; Slovene + widespread English/Italian/German. Honest trade-offs: Ljubljana sits in a BASIN with winter temperature inversions → seasonal PM spikes (the coast & alps are cleaner), grey cold winters, a smaller nomad scene, modest innovation, and ~no kawaii.",
+  innov:"GII #35/139, R&D 2.13% GDP; real but modest (Outfit7 'Talking Tom', Bitstamp roots) — not a frontier hub.",kawaii:"Low — small EU con scene, not an anime hub."}
+];
+
+// RADIATION-CLEANLINESS (task 2 of 3) — positive framing: higher %=cleaner/safer (low damaging UV + low ambient radon/cosmic/terrestrial).
+// Injected into CITY without touching the array above (never-regress-merge-superset: ADD, drop nothing).
+const RAD={
+ "tokyo":[70,"Mid-latitude (35°N) moderate UV, sea-level (low cosmic), moderate Japanese radon."],
+ "jeju-island":[66,"Subtropical sunny UV (33°N), but volcanic basalt = low radon, sea level."],
+ "cagliari":[52,"Mediterranean high summer UV + granitic island → elevated terrestrial/radon. The Blue Zone's hidden radiation cost."],
+ "lisbon":[58,"Very sunny (38°N) high summer UV; moderate radon; Atlantic, sea level."],
+ "reykjavik":[90,"Cleanest here: 64°N → annual UVI ~2 (lowest on record lists), basaltic low-radon, sea level. Minor volcanic SO₂ caveat."],
+ "zermatt":[50,"Altitude boosts UV + snow reflection; Central-Alps crystalline rock = high radon; more cosmic at altitude. 'Clean air' ≠ clean radiation."],
+ "hobart":[41,"Winter UV low but SUMMER extreme (ozone-hole proximity → world-class UV peaks). Radon low; UV burden dominates."],
+ "nelson":[46,"Very high NZ summer UV (clean air + low ozone). Radon low."],
+ "queenstown":[43,"High NZ UV + some altitude cosmic. Radon low."],
+ "chiang-mai":[48,"Tropical high UV year-round. Radon low. (Burning-season particulates are separate from radiation.)"],
+ "canggu":[42,"Equatorial extreme UV all year. Radon low, sea level."],
+ "mexico-city":[40,"Low-latitude + 2,240 m altitude = very high UV + elevated cosmic. The thin air that feels crisp also thins UV protection."],
+ "tbilisi":[62,"Moderate-high summer UV (42°N), continental. Moderate radon."],
+ "ljubljana":[69,"Moderate UV (46°N, cloudy winters help) but Dinaric karst = notable radon pockets. Coast/alps cleaner than the city basin."]
+};
+CITY.forEach(c=>{const r=RAD[c.slug]; c.s.radclean = r? r[0] : 55; c.rad = r? r[1] : "Not yet scored — approximated at 55."});
+
+// innovation map hubs
+const HUBS=[
+ {h:"Melbourne / Brisbane, AU",tags:[["ph","photonics"],["q","quantum"]],cand:"near Hobart candidate",note:"44.2 Tbps photonic chip (Monash·Swinburne·RMIT, 2020); PsiQuantum (AU founders)."},
+ {h:"Toronto, CA",tags:[["q","photonic quantum"],["ai","AI"]],cand:"",note:"Xanadu — photonic quantum computing."},
+ {h:"Eindhoven / Delft, NL",tags:[["ph","photonics"],["semi","semiconductors"],["q","quantum"]],cand:"",note:"PhotonDelta photonics; ASML (Veldhoven); QuTech (Delft)."},
+ {h:"San Jose–San Francisco, US",tags:[["ai","AI"],["semi","semiconductors"]],cand:"",note:"GII cluster #3; frontier AI + chips."},
+ {h:"Shenzhen–HK–Guangzhou / Beijing, CN",tags:[["ai","AI"],["semi","semiconductors"],["ph","photonics"]],cand:"",note:"GII cluster #1 & #4; top patent filer; biggest R&D spender."},
+ {h:"Tokyo–Yokohama, JP",tags:[["semi","semiconductors"],["ai","robotics/AI"],["bio","materials"]],cand:"★ Tokyo candidate",note:"GII cluster #2 — frontier across the board."},
+ {h:"Seoul, KR",tags:[["semi","semiconductors"],["ai","AI"]],cand:"★ Jeju rides this (KR)",note:"GII cluster #5; Samsung/SK Hynix; Korea R&D ~4.93% GDP (world-leading intensity)."},
+ {h:"Zurich–Basel / Lausanne, CH",tags:[["bio","biotech/pharma"],["q","quantum (ETH)"]],cand:"★ near Swiss Alps candidate",note:"Switzerland #1 GII country 15 yrs; EPFL/ETH."},
+ {h:"Reykjavík, IS",tags:[["bio","genomics"]],cand:"★ Reykjavík candidate",note:"deCODE genomics; geothermal/energy tech."},
+ {h:"Lisbon, PT",tags:[["ai","startups"]],cand:"★ Lisbon candidate",note:"Rising cluster; Web Summit; first PT unicorns."},
+ {h:"Ljubljana, SI",tags:[["ai","startups (modest)"]],cand:"★ Slovenia candidate",note:"GII #35; R&D 2.13% GDP; Outfit7/Talking Tom, Bitstamp roots — not a frontier hub."},
+ {h:"Mexico City, MX",tags:[["ai","fintech"]],cand:"★ Mexico City candidate",note:"New WIPO top-100 cluster (79th, 2025)."},
+ {h:"Ogliastra (Sardinia), IT",tags:[["bio","longevity genomics"]],cand:"★ Sardinia candidate",note:"SardiNIA cohort — niche frontier claim (not a tech hub)."}
+];
+
+let W={...PRESETS["Balanced"]}, activePreset="Balanced", sortKey="__score";
+
+// presets UI
+const presetsEl=document.getElementById("presets");
+Object.keys(PRESETS).forEach(name=>{
+ const b=document.createElement("div");b.className="preset"+(name===activePreset?" active":"");b.textContent=name;b.dataset.name=name;
+ b.onclick=()=>{W={...PRESETS[name]};activePreset=name;syncSliders();render();markPreset();};presetsEl.appendChild(b);
+});
+function markPreset(){[...presetsEl.children].forEach(c=>c.classList.toggle("active",c.dataset.name===activePreset));document.getElementById("presetName").textContent="· "+activePreset;}
+
+// sliders
+const slidersEl=document.getElementById("sliders");
+CRIT.forEach(c=>{
+ const row=document.createElement("div");row.className="sldrow";
+ row.innerHTML=`<label><span class="pm ${c.pm==='yes'?'yes':c.pm==='part'?'part':'no'}">${c.pm==='yes'?'PM':c.pm==='part'?'PM~':'—'}</span>${c.label}</label>
+ <span class="wval" id="v_${c.k}"></span><input style="grid-column:1/3" type="range" min="0" max="30" step="1" id="s_${c.k}">`;
+ slidersEl.appendChild(row);
+ row.querySelector("input").oninput=e=>{W[c.k]=+e.target.value;activePreset="Custom";[...presetsEl.children].forEach(x=>x.classList.remove("active"));document.getElementById("presetName").textContent="· Custom";document.getElementById("v_"+c.k).textContent=e.target.value;updWsum();render();};
+});
+function syncSliders(){CRIT.forEach(c=>{document.getElementById("s_"+c.k).value=W[c.k];document.getElementById("v_"+c.k).textContent=W[c.k];});updWsum();}
+function updWsum(){document.getElementById("wsum").textContent="(Σ="+CRIT.reduce((a,c)=>a+(+W[c.k]||0),0)+" → 100%)";}
+
+function weighted(c){const s=CRIT.reduce((a,x)=>a+(+W[x.k]||0),0)||1;let t=0;CRIT.forEach(x=>t+=c.s[x.k]*(W[x.k]/s));return t;}
+function heat(v){return `background:rgba(${200-Math.round(v*1.4)},${90+Math.round(v*1.1)},110,.14)`}
+
+function render(){
+ // ranking (always by score)
+ const rows=CITY.map(c=>({c,w:weighted(c)})).sort((a,b)=>b.w-a.w);
+ const max=rows[0].w;
+ let h=`<tr><th>#</th><th class="name">Place</th><th>Wtd %</th><th style="width:44%">score</th></tr>`;
+ rows.forEach((r,i)=>h+=`<tr class="${r.c.anchor?'anchor':''}" onclick="openDrawer('${r.c.slug}')"><td>${i+1}</td><td class="name">${r.c.name}${r.c.anchor?' ⚓':''}</td><td class="scorecell">${r.w.toFixed(1)}</td><td style="text-align:left"><span class="bar" style="width:${(r.w/max*100).toFixed(0)}%"></span></td></tr>`);
+ document.getElementById("rankTable").innerHTML=h;
+ const top=rows[0].c,jeju=rows.find(r=>r.c.anchor);
+ document.getElementById("rankFoot").innerHTML= top.anchor? `Under <b>${activePreset}</b>, staying in <b>Jeju</b> wins — moving gains don't beat zero move-cost.`
+   : `Under <b>${activePreset}</b>, <b>${top.name}</b> tops the list; Jeju is #${rows.indexOf(jeju)+1} (${jeju.w.toFixed(1)}), gap ${(rows[0].w-jeju.w).toFixed(1)} pts. Click any row for detail.`;
+
+ // matrix (sortable)
+ const mrows=CITY.map(c=>({c,w:weighted(c)}));
+ mrows.sort((a,b)=> sortKey==="__score"? b.w-a.w : (b.c.s[sortKey]-a.c.s[sortKey]));
+ let m=`<tr><th class="name" onclick="setSort('__name')">Place</th>`+CRIT.map(c=>`<th onclick="setSort('${c.k}')" title="${c.label}">${c.label.split(' ')[0]}<br><span class="pm ${c.pm==='yes'?'yes':c.pm==='part'?'part':'no'}">${c.pm==='yes'?'PM':c.pm==='part'?'PM~':'—'}</span></th>`).join('')+`<th onclick="setSort('__score')">Σ wtd▾</th></tr>`;
+ mrows.forEach(r=>{m+=`<tr class="${r.c.anchor?'anchor':''}" onclick="openDrawer('${r.c.slug}')"><td class="name">${r.c.name}</td>`+CRIT.map(c=>`<td class="heat" style="${heat(r.c.s[c.k])}">${r.c.s[c.k]}</td>`).join('')+`<td class="scorecell">${r.w.toFixed(1)}</td></tr>`});
+ document.getElementById("matrix").innerHTML=m;
+}
+function setSort(k){ if(k==="__name"){CITY.sort((a,b)=>a.name.localeCompare(b.name));sortKey="__name";} else sortKey=k; render(); }
+
+// raw table
+(function(){const cols=[["cost","Cost USD/mo"],["rent","1-BR rent USD/mo"],["net","Internet"],["pm25","PM2.5 µg/m³"],["temp","°C"],["safety","Safety"],["visa","Entry from KR"]];
+ let h=`<tr><th class="name">Place</th>`+cols.map(c=>`<th>${c[1]}</th>`).join('')+`</tr>`;
+ CITY.forEach(c=>{h+=`<tr class="${c.anchor?'anchor':''}" onclick="openDrawer('${c.slug}')"><td class="name">${c.name}</td>`+cols.map(k=>`<td class="num">${c.raw[k[0]]}</td>`).join('')+`</tr>`});
+ document.getElementById("raw").innerHTML=h;})();
+
+// innovation map
+(function(){document.getElementById("map").innerHTML=HUBS.map(H=>`<div class="hub"><h4>${H.h}</h4>
+ <div class="tags">${H.tags.map(t=>`<span class="tag ${t[0]}">${t[1]}</span>`).join('')}</div>
+ <div class="foot" style="margin-top:6px">${H.note}</div>${H.cand?`<div class="cand">${H.cand}</div>`:''}</div>`).join('');})();
+
+// detail drawer
+function openDrawer(slug){
+ const c=CITY.find(x=>x.slug===slug); if(!c)return;
+ document.getElementById("dTitle").innerHTML=c.name+(c.anchor?' ⚓ (anchor)':'');
+ const yt=`https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(c.ytq)}`;
+ const imgs=`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(c.name+" city")}`;
+ document.getElementById("dBody").innerHTML=`
+  <div>${c.blurb}</div>
+  <div class="chips">
+    <span class="chip">Cost $${c.raw.cost}/mo</span><span class="chip">Rent $${c.raw.rent}</span>
+    <span class="chip">Net ${c.raw.net}</span><span class="chip">PM2.5 ${c.raw.pm25}</span>
+    <span class="chip">${c.raw.temp}°C</span><span class="chip">Safety ${c.raw.safety}</span>
+    <span class="chip" style="color:var(--innov)">Innov ${c.s.innov}%</span><span class="chip kw">Kawaii ${c.s.kawaii}%</span><span class="chip" style="color:var(--good)">Rad-clean ${c.s.radclean}%</span>
+  </div>
+  <div class="foot"><b style="color:var(--innov)">Innovation:</b> ${c.innov}<br><b class="kw">Kawaii:</b> ${c.kawaii}<br><b style="color:var(--good)">Radiation cleanliness:</b> ${c.rad}</div>
+  <div class="lbtns">
+    <a class="lbtn" target="_blank" rel="noopener" href="https://nomads.com/${c.slug}">Nomad List page ↗</a>
+    <a class="lbtn" target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/${c.wiki}">Wikipedia ↗</a>
+    <a class="lbtn" target="_blank" rel="noopener" href="${imgs}">Photos ↗</a>
+    <a class="lbtn" target="_blank" rel="noopener" href="https://www.iqair.com/">Air quality ↗</a>
+  </div>
+  <div class="foot">Video / vibe:</div>
+  <iframe class="vid" src="${yt}" title="vibe" frameborder="0" allowfullscreen loading="lazy"></iframe>
+  <div class="foot" style="margin-top:8px">Links open in a new tab. Video is a live YouTube search embed (needs connection). Data are 2025–26 approximations — verify before committing.</div>`;
+ document.getElementById("overlay").style.display="block";
+ const d=document.getElementById("drawer");d.style.display="block";requestAnimationFrame(()=>d.classList.add("open"));
+}
+function closeDrawer(){const d=document.getElementById("drawer");d.classList.remove("open");document.getElementById("overlay").style.display="none";setTimeout(()=>d.style.display="none",200);}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDrawer();});
+
+// init
+syncSliders();markPreset();render();
+</script>
+</body>
+</html>
