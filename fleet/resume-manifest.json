@@ -1,0 +1,73 @@
+{
+    "schema":  "fleet-resume/1",
+    "host":  "EC2AMAZ-TMCR7KB",
+    "generated":  "2026-11-24T14:44:03.4415454+00:00",
+    "trigger":  "boot",
+    "boot_time":  "2026-11-24T05:22:49.5000000+00:00",
+    "components":  [
+                       {
+                           "name":  "gateway-18789",
+                           "critical":  true,
+                           "status":  "up"
+                       },
+                       {
+                           "name":  "omnisphere-3005",
+                           "critical":  true,
+                           "status":  "up"
+                       },
+                       {
+                           "name":  "dashboard-8080",
+                           "critical":  true,
+                           "status":  "up"
+                       },
+                       {
+                           "name":  "moltbot-saas-3000",
+                           "critical":  false,
+                           "status":  "up"
+                       },
+                       {
+                           "name":  "vivaldi-seats",
+                           "critical":  false,
+                           "status":  "up"
+                       },
+                       {
+                           "name":  "stream-stack-obs",
+                           "critical":  true,
+                           "status":  "up"
+                       },
+                       {
+                           "name":  "selftest-3099",
+                           "critical":  false,
+                           "status":  "up"
+                       }
+                   ],
+    "tasks":  [
+                  {
+                      "name":  "KeyGuard-BrowserReseal",
+                      "state":  "Ready"
+                  },
+                  {
+                      "name":  "Omnisphere-FleetStream",
+                      "state":  "Ready"
+                  },
+                  {
+                      "name":  "OmnispherePagesDataRefresh",
+                      "state":  "Running"
+                  },
+                  {
+                      "name":  "SystemWatchdog",
+                      "state":  "Running"
+                  },
+                  {
+                      "name":  "KairosClaudeReaper",
+                      "state":  "Ready"
+                  }
+              ],
+    "resume":  {
+                   "fleet_dir":  "C:\\Users\\Administrator\\.openclaw\\fleet",
+                   "curator_ledger":  "C:\\curator",
+                   "omnisphere":  "C:\\Users\\Administrator\\omnisphere",
+                   "note":  "Each service reloads its own persisted state on relaunch (OpenClaw sessions, Omnisphere state, OBS scenes). This manifest records desired+observed fleet state so a human or script can resume after reboot or total VM loss."
+               },
+    "note":  "PUBLIC-SANITIZED: operational fleet state only. No secrets, tokens, credentials, or personal data."
+}
