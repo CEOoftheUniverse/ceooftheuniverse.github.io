@@ -1,14 +1,14 @@
 {
     "schema":  "fleet-resume/1",
     "host":  "EC2AMAZ-TMCR7KB",
-    "generated":  "2026-11-25T04:49:55.2029107+00:00",
+    "generated":  "2026-11-25T04:50:07.0700785+00:00",
     "trigger":  "watchdog",
     "boot_time":  "2026-11-25T04:45:37.7924860+00:00",
     "components":  [
                        {
                            "name":  "gateway-18789",
                            "critical":  true,
-                           "status":  "down"
+                           "status":  "up"
                        },
                        {
                            "name":  "omnisphere-3005",
