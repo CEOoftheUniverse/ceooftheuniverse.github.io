@@ -1,8 +1,8 @@
 {
     "schema":  "fleet-resume/1",
     "host":  "EC2AMAZ-TMCR7KB",
-    "generated":  "2026-11-25T04:47:06.5420249+00:00",
-    "trigger":  "boot",
+    "generated":  "2026-11-25T04:47:18.8973178+00:00",
+    "trigger":  "watchdog",
     "boot_time":  "2026-11-25T04:45:37.7924860+00:00",
     "components":  [
                        {
