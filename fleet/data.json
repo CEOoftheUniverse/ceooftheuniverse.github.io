@@ -1,10 +1,10 @@
 {
-    "generated":  "2026-11-25T10:32:02Z",
-    "generated_epoch":  1795602723,
+    "generated":  "2026-11-25T10:42:06Z",
+    "generated_epoch":  1795603326,
     "as_of":  "2026-11-20",
     "vm":  "VM1317 (Wagon) - 1 VM today; rolls into a combined total as more come online",
     "fleet_24_7":  true,
-    "uptime_h":  5.8,
+    "uptime_h":  5.9,
     "dials":  {
                   "analyzing_done_pct":  88,
                   "analyzing_left_pct":  12,
@@ -167,7 +167,7 @@
                  "roster_total":  21,
                  "utilization_pct":  33,
                  "node_procs":  76,
-                 "python_procs":  46,
+                 "python_procs":  47,
                  "sessions":  80,
                  "deliverables_24h":  0,
                  "deliverables_7d":  42,
