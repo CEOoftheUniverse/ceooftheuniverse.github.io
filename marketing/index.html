@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Omnisphere Marketing Leg - reusable, venture-agnostic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#fbf7ff; --bg2:#f2fbff; --bg3:#fff6fa;
+  --ink:#3b3550; --ink-soft:#6a6382; --line:#ece6f6;
+  --card:#ffffff; --lav:#b79cff; --lav-d:#8f6dff; --blush:#ffb7d5; --mint:#9fe7d4; --sun:#ffd79a;
+  --ok:#2bb98a; --warn:#e8923a; --chip:#f3eefe;
+  --shadow:0 10px 30px rgba(130,110,190,.12), 0 2px 8px rgba(130,110,190,.08);
+  --radius:20px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Quicksand',ui-rounded,'Segoe UI',system-ui,sans-serif;color:var(--ink);
+  background:linear-gradient(135deg,var(--bg1),var(--bg2) 55%,var(--bg3));min-height:100vh;line-height:1.55}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 20px 60px}
+header.hero{text-align:center;padding:26px 18px 10px}
+.badge{display:inline-block;font-size:12px;font-weight:600;color:var(--lav-d);background:var(--chip);
+  border:1px solid var(--line);padding:5px 14px;border-radius:999px;margin-bottom:12px;letter-spacing:.3px}
+h1{font-size:30px;margin:6px 0 4px;font-weight:700;letter-spacing:.2px}
+h1 .spark{color:var(--lav-d)}
+.sub{color:var(--ink-soft);font-size:15px;max-width:660px;margin:6px auto 0}
+.note{background:linear-gradient(180deg,#fff,#fdfbff);border:1px solid var(--line);border-left:4px solid var(--blush);
+  border-radius:14px;padding:12px 16px;margin:16px auto;max-width:860px;font-size:13.5px;color:var(--ink-soft)}
+.note b{color:var(--ink)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:22px 0 18px}
+.tab{cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink-soft);font-weight:600;font-size:13.5px;
+  padding:9px 16px;border-radius:999px;transition:.18s;font-family:inherit}
+.tab:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
+.tab.active{background:linear-gradient(135deg,var(--lav),var(--lav-d));color:#fff;border-color:transparent}
+.panel{display:none;animation:fade .3s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:22px 24px;margin:14px 0}
+.card h2{font-size:19px;margin:0 0 8px;display:flex;align-items:center;gap:9px}
+.card h3{font-size:15.5px;margin:16px 0 6px;color:var(--lav-d)}
+.pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--chip);color:var(--lav-d);border:1px solid var(--line)}
+.pill.live{background:#e7fbf2;color:var(--ok);border-color:#c7f0e0}
+.pill.pend{background:#fff3e6;color:var(--warn);border-color:#ffe0c2}
+p{margin:8px 0}
+small{color:var(--ink-soft)}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--ink-soft);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.4px}
+tr.win td{background:linear-gradient(90deg,#f6f0ff,#fff);font-weight:600}
+.num{text-align:center;font-weight:700}
+.bar{height:7px;border-radius:999px;background:var(--line);overflow:hidden;min-width:60px}
+.bar>i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--lav),var(--lav-d))}
+a{color:var(--lav-d);text-decoration:none;border-bottom:1px dotted var(--lav)}
+a:hover{color:var(--ink)}
+code,pre{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+pre{background:#faf7ff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;overflow:auto;font-size:12px;color:#4a4463}
+.flow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;margin:14px 0}
+.node{background:linear-gradient(180deg,#fff,#faf7ff);border:1px solid var(--line);border-radius:14px;padding:10px 14px;
+  font-weight:600;font-size:13px;text-align:center;min-width:120px;box-shadow:var(--shadow)}
+.node small{display:block;font-weight:500;margin-top:2px}
+.arrow{color:var(--lav);font-size:20px;font-weight:700}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.mini{background:linear-gradient(180deg,#fff,#fcfaff);border:1px solid var(--line);border-radius:16px;padding:16px}
+.mini h4{margin:0 0 4px;font-size:14.5px;display:flex;align-items:center;gap:8px}
+.kw{color:var(--lav-d);font-weight:700}
+.steps{counter-reset:s;list-style:none;padding:0;margin:8px 0}
+.steps li{counter-increment:s;position:relative;padding:8px 8px 8px 42px;margin:6px 0;background:#fcfaff;border:1px solid var(--line);border-radius:12px;font-size:13.5px}
+.steps li::before{content:counter(s);position:absolute;left:10px;top:50%;transform:translateY(-50%);width:24px;height:24px;
+  border-radius:50%;background:linear-gradient(135deg,var(--lav),var(--lav-d));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px}
+footer{text-align:center;color:var(--ink-soft);font-size:12.5px;margin-top:26px;padding-top:16px;border-top:1px solid var(--line)}
+@media(max-width:720px){.grid3,.grid2{grid-template-columns:1fr}h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div style="background:#0c1118;border-bottom:1px solid #2a3542;padding:9px 16px;font-size:13px;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <a href="/" style="color:#8fe3b2;font-weight:700;text-decoration:none">&#9776; Omnisphere ventures hub</a>
+  <span style="color:#5b6b7d"> &middot; </span>
+  <a href="/energy/" style="color:#6fd0ff;text-decoration:none;margin-right:11px">Energy</a>
+  <a href="/financing/" style="color:#6fd0ff;text-decoration:none;margin-right:11px">Financing</a>
+  <a href="/atlas/" style="color:#6fd0ff;text-decoration:none;margin-right:11px">Atlas</a>
+  <a href="/market/" style="color:#6fd0ff;text-decoration:none;margin-right:11px">Market</a>
+  <a href="/marketing/" style="color:#6fd0ff;text-decoration:none;margin-right:11px">Marketing</a>
+  <a href="/radiation/" style="color:#6fd0ff;text-decoration:none;margin-right:11px">Radiation</a>
+  <a href="/fleet/" style="color:#6fd0ff;text-decoration:none">Fleet</a>
+</div>
+<div class="wrap">
+  <header class="hero">
+    <span class="badge">Omnisphere - reusable "leg" - v1 - 2026-11-23</span>
+    <h1><span class="spark">&#10022;</span> Marketing Leg <span class="spark">&#10022;</span></h1>
+    <p class="sub">One contract, every venture: a venture profile goes in, a positioned plan + ready-to-post content + channel setup come out. The Structure Webworks "$15k system" blueprint, rebuilt lean on your own newest AIs and the tools you already have.</p>
+  </header>
+
+  <div class="note"><b>Tool note (first line, honest):</b> the hosted claude.ai artifact link tool is disconnected this session, so this is delivered as a self-contained <b>HTML artifact file</b> (opens + shares from your folder, renders inline in Cowork). The hosted share-URL can be published the moment that service reconnects - nothing else needs redoing.</div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-t="o">Overview</button>
+    <button class="tab" data-t="b">Build vs Buy</button>
+    <button class="tab" data-t="a">Architecture</button>
+    <button class="tab" data-t="g">The 3 Agents</button>
+    <button class="tab" data-t="p">Venture Profile</button>
+    <button class="tab" data-t="seo">Example: SEO #4</button>
+    <button class="tab" data-t="junk">Example: Junk #1</button>
+    <button class="tab" data-t="run">Run it</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section class="panel active" data-p="o">
+    <div class="card">
+      <h2>&#127800; What the leg is</h2>
+      <p>A reusable module shaped exactly like your financing and HR legs: <b>fill one short venture profile, run it, get back a marketing plan, a week of content, and the channel wiring</b> - for any venture, with no rewrite. It plugs into the Omnisphere pipeline, and its Strategy step can be sent to the full multi-AI panel for consensus.</p>
+      <div class="grid3">
+        <div class="mini"><h4>&#128269; Intelligence</h4><small>market, competitors, ICP pains, keyword/AEO gaps, trend hooks - every claim graded A/B/C with a link.</small></div>
+        <div class="mini"><h4>&#129513; Strategy</h4><small>positioning line, channels ranked by fit, budget split, funnel, 30/60/90 KPIs.</small></div>
+        <div class="mini"><h4>&#10024; Content-Production</h4><small>channel-native copy, creative briefs, a 7-14 day Postiz schedule, TikTok Ads briefs.</small></div>
+      </div>
+      <p style="margin-top:14px"><small>Your ask, kept verbatim and intact, lives at the top of <code>marketing_leg_reusable_spec_2026-11-23.md</code> in <code>apex_kimi_files</code>.</small></p>
+    </div>
+  </section>
+
+  <!-- BUILD VS BUY -->
+  <section class="panel" data-p="b">
+    <div class="card">
+      <h2>&#128172; search-before-build: adopt, build, or buy?</h2>
+      <p>Searched first. There is <b>no single open-source stack</b> that wires research -&gt; strategy -&gt; content -&gt; multi-channel <i>posting</i> together; the space is commercial agentic platforms plus partial templates. So we keep the $15k system's <b>blueprint</b> and run it on tools you already pay for.</p>
+      <table>
+        <thead><tr><th>Option</th><th>Build cost</th><th>Stand-up</th><th>Fit</th><th>Cost-eff</th><th>Speed</th><th>Lock-in freedom</th></tr></thead>
+        <tbody>
+          <tr class="win"><td>Lean Omnisphere leg <span class="pill live">do this</span><br><small>your AIs + Postiz + TikTok Ads</small></td><td>~$0<br><small>reuses fleet</small></td><td>~1 day</td>
+            <td><div class="bar"><i style="width:92%"></i></div><small>92%</small></td>
+            <td><div class="bar"><i style="width:96%"></i></div><small>96%</small></td>
+            <td><div class="bar"><i style="width:90%"></i></div><small>90%</small></td>
+            <td><div class="bar"><i style="width:95%"></i></div><small>95%</small></td></tr>
+          <tr><td>OSS adopt<br><small>CrewAI/LangGraph + n8n</small></td><td>~$0 + $4-20/mo VPS</td><td>1-3 weeks</td>
+            <td><div class="bar"><i style="width:72%"></i></div><small>72%</small></td>
+            <td><div class="bar"><i style="width:80%"></i></div><small>80%</small></td>
+            <td><div class="bar"><i style="width:55%"></i></div><small>55%</small></td>
+            <td><div class="bar"><i style="width:75%"></i></div><small>75%</small></td></tr>
+          <tr><td>Structure Webworks "$15k system"<br><small>ELK + Supabase + queues</small></td><td>$15,000<br><small>~EUR 13,760</small></td><td>weeks</td>
+            <td><div class="bar"><i style="width:70%"></i></div><small>70%</small></td>
+            <td><div class="bar"><i style="width:40%"></i></div><small>40%</small></td>
+            <td><div class="bar"><i style="width:45%"></i></div><small>45%</small></td>
+            <td><div class="bar"><i style="width:45%"></i></div><small>45%</small></td></tr>
+        </tbody>
+      </table>
+      <p><small>Sorted by cost-efficiency. Scores are evidence-anchored estimates (flagged), not measured. Refs: <a href="https://hightouch.com/blog/agentic-marketing-platform">Hightouch</a>, <a href="https://www.optimizely.com/agent-orchestration/">Optimizely Opal</a>, <a href="https://www.cmswire.com/the-wire/ibexa-launches-the-new-agentic-marketing-platform/">Ibexa</a>, <a href="https://pages.edgeone.ai/templates/crewai-marketing-campaign">CrewAI template</a>, <a href="https://n8n.io/workflows/6898">n8n #6898</a>, <a href="https://github.com/enescingoz/awesome-n8n-templates">awesome-n8n-templates</a>.</small></p>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section class="panel" data-p="a">
+    <div class="card">
+      <h2>&#127959;&#65039; The blueprint, rebuilt lean</h2>
+      <div class="flow">
+        <div class="node">venture_profile<small>.json</small></div><span class="arrow">&#8594;</span>
+        <div class="node" style="border-color:var(--lav)">Orchestrator<small>Opus 5.5</small></div><span class="arrow">&#8594;</span>
+        <div class="node">Intelligence<small>Perplexity + Grok 4.6</small></div>
+        <div class="node">Strategy<small>Opus 5.5 / GPT-6.2</small></div>
+        <div class="node">Content<small>GPT-6.2 / Gemini 4 + Kling + Kimi K3.1</small></div>
+      </div>
+      <div class="flow">
+        <span class="arrow">&#8595;</span>
+      </div>
+      <div class="flow">
+        <div class="node">KB<small>md / json files</small></div>
+        <div class="node">Logs<small>jsonl</small></div>
+        <div class="node">Queue<small>curator_v1/queue</small></div>
+        <span class="arrow">&#8594;</span>
+        <div class="node" style="border-color:var(--mint)">Distribution<small>Postiz + TikTok Ads</small></div>
+        <span class="arrow">&#8594;</span>
+        <div class="node">Output<small>plan + content + setup</small></div>
+      </div>
+      <h3>Every heavy component swapped for a fleet-native one</h3>
+      <table>
+        <thead><tr><th>Blueprint</th><th>Structure's build</th><th>Lean fleet equivalent</th></tr></thead>
+        <tbody>
+          <tr><td>Knowledge base</td><td>Notion + Supabase</td><td>Markdown + JSON in <code>apex_kimi_files</code> / <code>marketing-leg</code></td></tr>
+          <tr><td>Observability</td><td>ELK stack</td><td><code>curator_v1/logs/*.jsonl</code> + run-state md</td></tr>
+          <tr><td>Queue / cache / DB</td><td>Redis + DB</td><td><code>curator_v1/queue/consensus/</code> (your pipeline queue)</td></tr>
+          <tr><td>50+ channels</td><td>50+ direct APIs</td><td><span class="pill live">live</span> Postiz (28+) + TikTok Ads &nbsp; <span class="pill pend">later</span> GA4 / Klaviyo / Mailchimp / Meta+Google+LinkedIn Ads / HubSpot</td></tr>
+        </tbody>
+      </table>
+      <p><small>"Newest" resolves at run time (your standing rule): newest, most efficient model per provider tab; driver fallback GLM-5.3 -&gt; GPT-6.2 -&gt; Opus 5.5 -&gt; Sonnet 5.5, all on OAuth.</small></p>
+    </div>
+  </section>
+
+  <!-- AGENTS -->
+  <section class="panel" data-p="g">
+    <div class="card">
+      <h2>&#129302; The three specialist agents</h2>
+      <div class="grid3">
+        <div class="mini"><h4>&#128269; Intelligence</h4>
+          <small><b>Model:</b> Perplexity + Grok 4.6 (newest)<br><b>In:</b> venture_profile<br><b>Out:</b> <code>intel.json</code> - market, 3-5 competitors + angles, ICP pains, keyword/SERP + AEO gaps, trend hooks; every claim graded A/B/C with a link.</small></div>
+        <div class="mini"><h4>&#129513; Strategy</h4>
+          <small><b>Model:</b> Opus 5.5 / GPT-6.2 (+ optional full panel)<br><b>In:</b> profile + intel<br><b>Out:</b> <code>strategy.md</code> - positioning line, channels ranked by fit, budget split %, offer/funnel, 30/60/90 KPIs.</small></div>
+        <div class="mini"><h4>&#10024; Content-Production</h4>
+          <small><b>Model:</b> GPT-6.2 / Gemini 4 + Kling/Runway + Kimi K3.1<br><b>In:</b> strategy<br><b>Out:</b> <code>content_pack/</code> - channel-native copy, creative briefs/clips, 7-14 day schedule, ad briefs + <code>channel_setup.md</code>.</small></div>
+      </div>
+      <h3>Guardrails baked into every agent</h3>
+      <p><small>Grade claims A/B/C with clickable sources - metric units - preserve the founder's verbatim ask - never fabricate panel scores (use <span class="pill pend">pending panel</span>) - never post, pay, or touch keys; everything stages for a one-click human go.</small></p>
+    </div>
+  </section>
+
+  <!-- PROFILE -->
+  <section class="panel" data-p="p">
+    <div class="card">
+      <h2>&#128221; The one contract: venture_profile.json</h2>
+      <p>Fill this once per venture - the leg needs nothing else. Change only this file and the identical leg runs any venture.</p>
+<pre>{
+  "venture_id": "4-seo-content",
+  "name": "SEO Content Engine",
+  "one_line": "Done-for-you AI-answer-era SEO content for SMBs &amp; SaaS",
+  "model": "productized-service",
+  "offer": "N keyword-mapped, AEO-optimized articles/mo to your CMS",
+  "icp": ["SaaS growth leads", "SMB owners", "ecommerce founders"],
+  "price_point_usd": [500, 3000],
+  "geo": ["global-online"],
+  "unit_economics": {"cost_per_unit_usd": 15, "target_cac_usd": 300, "ltv_usd": 6000},
+  "tools_live": ["postiz", "tiktok_ads"],
+  "tools_pending": ["ga4", "klaviyo", "mailchimp", "hubspot", "google_ads"],
+  "budget_month_usd": 500,
+  "constraints": ["online-only", "max automation", "founder &lt;2h/week"],
+  "brand": {"tone": "elegant, calm, expert; kawaii-soft; no hype", "languages": ["en"]}
+}</pre>
+    </div>
+  </section>
+
+  <!-- SEO EXAMPLE -->
+  <section class="panel" data-p="seo">
+    <div class="card">
+      <h2>&#127793; Worked example - Venture #4: SEO Content Engine <span class="pill">full run</span></h2>
+      <h3>&#128269; Intelligence -&gt; intel.json</h3>
+      <p><small>Search is moving to AI answers (AEO/GEO) - keyword-stuffed content is losing; "content AI engines cite" is the wedge. Competitors: cheap AI mills (low trust), boutique agencies (slow, pricey), DIY tools. <span class="kw">Gap = managed, mid-price, citation-engineered SEO content.</span> ICP pains: "I rank but get no traffic", "AI Overviews stole my clicks", "I can't stay consistent."</small></p>
+      <h3>&#129513; Strategy -&gt; strategy.md</h3>
+      <p><small><b>Positioning:</b> "SEO content for the AI-answer era - written to be <i>cited</i>, not just ranked." <b>Channels (by fit):</b> LinkedIn thought-leadership -&gt; X teardown threads -&gt; YouTube/TikTok how-to -&gt; a lead magnet ("AEO Checklist") -&gt; small TikTok Ads test. <b>Budget of $500/mo:</b> 60% organic + magnet, 25% TikTok Ads, 15% tools. <b>KPIs:</b> 30d = 25 magnet downloads; 60d = 3 calls; 90d = 2 retainers (~$1-3k MRR).</small></p>
+      <h3>&#10024; Content-Production -&gt; content_pack/</h3>
+      <div class="grid2">
+        <div class="mini"><h4>LinkedIn post</h4><small>"Google's AI Overview just answered your customer - using someone else's page. Here's the 4-part structure that gets <i>yours</i> cited instead." (carousel)</small></div>
+        <div class="mini"><h4>X thread hook</h4><small>"I audited 10 SaaS blogs. 9 are invisible to AI answers. The 1 that isn't does these 5 things:"</small></div>
+        <div class="mini"><h4>TikTok / Short (30s)</h4><small>Hook "ranking #1 and still no traffic?" -&gt; show AI Overview stealing the click -&gt; the fix -&gt; CTA to the free checklist.</small></div>
+        <div class="mini"><h4>Posting schedule (Postiz)</h4><small>Mon LI - Tue X - Wed TikTok how-to - Thu LI carousel - Fri YT short - Sat repost to Threads/Reddit - Sun magnet promo.</small></div>
+      </div>
+      <p><small><b>channel_setup.md:</b> connect LI/X/TikTok/YouTube/Threads in Postiz; TikTok Ads = 1 campaign, 3 hook variants, $10/day, optimize for checklist landing-page views.</small></p>
+    </div>
+  </section>
+
+  <!-- JUNK EXAMPLE -->
+  <section class="panel" data-p="junk">
+    <div class="card">
+      <h2>&#128230; Worked example - Venture #1: Junk Brokerage <span class="pill">compact run</span></h2>
+      <p><small>Taken as an asset-light junk-removal / clearance brokerage - connect people needing junk hauled with vetted local haulers, own the demand + booking, broker jobs for a margin, no trucks owned. Swap freely if the ledger scopes it differently - the leg is venture-agnostic.</small></p>
+      <div class="grid3">
+        <div class="mini"><h4>&#128269; Intelligence</h4><small>Demand is hyperlocal + visual; incumbents (1-800-GOT-JUNK, LoadUp) win on trust/speed. <span class="kw">Gap = instant upfront price + satisfying before/after + asset-light margin.</span> Hooks: oddly-satisfying before/after Reels, hoarder clear-outs, price-reveal.</small></div>
+        <div class="mini"><h4>&#129513; Strategy</h4><small>"Book junk removal in 60 seconds - vetted local haulers, upfront price." Channels: TikTok Ads + organic before/after Reels -&gt; Google Local/LSAs -&gt; Facebook community -&gt; 60-sec booking page. Budget $300/mo: 55% TikTok Ads, 25% Google Local, 20% page/tools. KPI: cost/lead &lt; $8, booking &gt; 20%, margin/job 25-40%.</small></div>
+        <div class="mini"><h4>&#10024; Content</h4><small>TikTok before/after script + 5 hooks; "upfront price, gone today" offer copy; 7-day Postiz schedule of before/after Reels cross-posted to IG/FB/Shorts; TikTok Ads brief (3 before/after variants, $10/day, geo = one metro, optimize booking clicks).</small></div>
+      </div>
+      <p style="text-align:center;margin-top:14px"><small>Both ventures used the <b>identical leg</b> - only <code>venture_profile.json</code> changed. That is the whole point. &#128149;</small></p>
+    </div>
+  </section>
+
+  <!-- RUN -->
+  <section class="panel" data-p="run">
+    <div class="card">
+      <h2>&#9654;&#65039; How to run it</h2>
+      <ol class="steps">
+        <li><b>Trigger</b> <code>/market &lt;venture_id&gt;</code> (add to OMNISPHERE-TRIGGERS.md) expands to "run the marketing leg on this profile."</li>
+        <li><b>Fast pass:</b> the Orchestrator runs the 3 agents on the newest models -&gt; plan + content + setup in one turn.</li>
+        <li><b>Consensus upgrade (optional):</b> send the Strategy step to the full Omnisphere panel (P1-P20, @grok-on-X fallback) via the consensus queue; until it runs, per-AI columns read <span class="pill pend">pending panel</span>.</li>
+        <li><b>Dispatch to the VM:</b> queue the brief to Drive CURATOR-INBOX.md. <b>Queue is not delivery</b> - reported "queued, not yet picked up" until the VM loop visibly pulls it.</li>
+        <li><b>You stay in control:</b> nothing posts, pays, or touches keys without your one-click go.</li>
+      </ol>
+      <h3>Cost (price-normalized)</h3>
+      <p><small>Build ~$0 vs $15,000 for the Structure system (payback: immediate). Per-venture run ~$2-8 in tokens on metered APIs, or ~$0 on your flat-rate GLM-5.3 / OAuth plans. Postiz ~$0-29/mo; ad spend your choice (start a $150-300/mo TikTok Ads test per venture).</small></p>
+    </div>
+  </section>
+
+  <footer>
+    Omnisphere Marketing Leg v1 - saved to <code>apex_kimi_files/marketing_leg_reusable_spec_2026-11-23.md</code> (+ this HTML) and <code>omnisphere_threads/marketing-leg/</code>.<br>
+    Built on your fleet - newest models at run time - no funds, keys, or publishing touched. Made with care. &#10022;
+  </footer>
+</div>
+<script>
+(function(){
+  var tabs=document.querySelectorAll('.tab'), panels=document.querySelectorAll('.panel');
+  tabs.forEach(function(t){t.addEventListener('click',function(){
+    tabs.forEach(function(x){x.classList.remove('active')});
+    panels.forEach(function(p){p.classList.remove('active')});
+    t.classList.add('active');
+    document.querySelector('.panel[data-p="'+t.dataset.t+'"]').classList.add('active');
+  })});
+})();
+</script>
+</body>
+</html>
