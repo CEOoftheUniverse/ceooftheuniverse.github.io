@@ -1,14 +1,14 @@
 {
     "schema":  "fleet-resume/1",
     "host":  "EC2AMAZ-TMCR7KB",
-    "generated":  "2026-11-24T14:45:50.7359285+00:00",
-    "trigger":  "watchdog",
-    "boot_time":  "2026-11-24T05:22:49.5000000+00:00",
+    "generated":  "2026-11-25T04:47:06.5420249+00:00",
+    "trigger":  "boot",
+    "boot_time":  "2026-11-25T04:45:37.7924860+00:00",
     "components":  [
                        {
                            "name":  "gateway-18789",
                            "critical":  true,
-                           "status":  "up"
+                           "status":  "down"
                        },
                        {
                            "name":  "omnisphere-3005",
@@ -33,7 +33,7 @@
                        {
                            "name":  "stream-stack-obs",
                            "critical":  true,
-                           "status":  "up"
+                           "status":  "down"
                        },
                        {
                            "name":  "selftest-3099",
@@ -48,7 +48,7 @@
                   },
                   {
                       "name":  "Fleet-Boot",
-                      "state":  "Ready"
+                      "state":  "Running"
                   },
                   {
                       "name":  "Fleet-Watchdog",
@@ -56,11 +56,11 @@
                   },
                   {
                       "name":  "Omnisphere-FleetStream",
-                      "state":  "Ready"
+                      "state":  "Running"
                   },
                   {
                       "name":  "OmnispherePagesDataRefresh",
-                      "state":  "Ready"
+                      "state":  "Running"
                   },
                   {
                       "name":  "SystemWatchdog",
